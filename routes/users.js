@@ -1,9 +1,33 @@
 import express from 'express';
-var router = express.Router();
+import { signup, login } from '../controllers/users.js';
+import * as validator from '../middlewares/user.js'
+import { auth } from '../middlewares/auth.js';
+import db from '../config/db.js';
+let router = express.Router();
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+router.get('/', async function(req, res, next) {
+  const resp = await db.query('SELECT * FROM users');
+
+  res.json({
+    status: 'success',
+    data: {
+      users: resp.rows,
+    },
+  });
+});
+
+router.post('/signup', validator.signupMiddleware, signup);
+router.post('/login', login);
+router.post('/promote', auth, function(req, res, next) {
+  // const resp = await db.query('SELECT * FROM users');
+
+  res.json({
+    status: 'success',
+    data: {
+      users: req.user,
+    },
+  });
 });
 
 export default router;
