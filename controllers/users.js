@@ -41,3 +41,52 @@ export const login = async (req, res) => {
     res.status(500).json({ status: 500, error: error.message });
   }
 };
+
+
+export const promoteToMentor = async (req, res) => {
+  try {
+    const user = await User.promoteToMentor(req.params.id);
+    if (!user) return res.status(404).json({ status: 404, error: 'User not found' });
+    user.password = undefined;
+    res.status(200).json({
+      status: 200,
+      message: 'User promoted to mentor successfully',
+      data: { user }
+    });
+  } catch (error) {
+    res.status(500).json({ status: 500, error: error.message });
+  }
+};
+
+
+export const viewMentors =  async (req, res) => {
+    try {
+        const mentors = await User.findAllMentors();
+        if (!mentors) return res.status(404).json({ status: 404, error: 'No mentors found' });
+    
+        res.status(200).json({
+        status: 200,
+        message: 'Mentors retrieved successfully',
+        data: { mentors }
+        });
+    } catch (error) {
+        res.status(500).json({ status: 500, error: error.message });
+    }
+}
+
+export const viewMentorById = async (req, res) => {
+  try {
+    const mentor = await User.findMentorById(req.params.id);
+    if (!mentor) return res.status(404).json({ status: 404, error: 'Mentor not found' });
+
+    res.status(200).json({
+      status: 200,
+      message: 'Mentor retrieved successfully',
+      data: { mentor }
+    });
+  } catch (error) {
+    res.status(500).json({ status: 500, error: error.message });
+  }
+};
+
+

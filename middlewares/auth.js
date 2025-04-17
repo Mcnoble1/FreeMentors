@@ -26,3 +26,10 @@ export const auth = async (req, res, next) => {
   }
 };
 
+export const isAdmin = (req, res, next) => {
+  if (req.user.isadmin === true) {
+    next();
+  } else {
+    res.status(403).json({ message: "Access denied" });
+  }
+}

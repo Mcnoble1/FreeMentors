@@ -30,3 +30,15 @@ export const promoteToMentor = async (id) => {
   const result = await db.query(`UPDATE users SET role = 'mentor' WHERE id = $1 RETURNING *`, [id]);
   return result.rows[0];
 };
+
+export const findAllMentors = async () => {
+  const result = await db.query(`SELECT * FROM users WHERE role = 'mentor'`);
+  return result.rows;
+}
+
+export const findMentorById = async (id) => {
+  const result = await db.query(`SELECT * FROM users WHERE id = $1 AND role = 'mentor'`, [id]);
+  return result.rows[0];
+};
+
+
